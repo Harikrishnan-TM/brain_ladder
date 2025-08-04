@@ -24,6 +24,11 @@ urlpatterns = [
     path('signup/', views.signup_view, name='signup'),
     path('login/', auth_views.LoginView.as_view(template_name='game/login.html'), name='login'),
     path('logout/', auth_views.LogoutView.as_view(next_page='login'), name='logout'),
+    path('about/', views.about, name='about'),
+    path('contact/', views.contact_view, name='contact'),
+    path('refund/', views.refund_policy, name='refund_policy'),
+    path('privacy/', views.privacy_policy, name='privacy_policy'),
+    path('terms/', views.terms, name='terms'),
 
 
 

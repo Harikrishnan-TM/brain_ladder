@@ -6,7 +6,7 @@
     <title>Welcome to Brain Ladder</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- Fonts: Retro + Modern -->
+    <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 
     <style>
@@ -16,10 +16,37 @@
             font-family: 'Poppins', sans-serif;
             background: linear-gradient(135deg, #1e3c72, #2a5298);
             color: white;
-            text-align: center;
             display: flex;
             flex-direction: column;
             min-height: 100vh;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #000000cc;
+            padding: 10px 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.7);
+        }
+
+        .logo-header {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 16px;
+            color: #f1c40f;
+            text-shadow: 1px 1px 2px #000;
+        }
+
+        nav a {
+            color: #fff;
+            margin: 0 10px;
+            text-decoration: none;
+            font-size: 13px;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: #f1c40f;
         }
 
         .container {
@@ -28,6 +55,7 @@
             padding: 30px 20px;
             border-radius: 20px;
             max-width: 90%;
+            text-align: center;
         }
 
         .logo {
@@ -97,7 +125,7 @@
                 padding: 10px 14px;
             }
 
-            .logo {
+            .logo, .logo-header {
                 font-size: 20px;
             }
 
@@ -105,7 +133,7 @@
                 font-size: 14px;
             }
 
-            p {
+            p, nav a {
                 font-size: 11px;
             }
 
@@ -116,10 +144,28 @@
             footer {
                 font-size: 11px;
             }
+
+            nav {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
         }
     </style>
 </head>
 <body>
+
+    <header>
+        <div class="logo-header">🎯 Brain Ladder</div>
+        <nav>
+            <a href="{% url 'home' %}">Home</a>
+            <a href="{% url 'about' %}">About Us</a>
+            <a href="{% url 'contact' %}">Contact</a>
+            <a href="{% url 'privacy_policy' %}">Privacy</a>
+            <a href="{% url 'refund_policy' %}">Refund Policy</a>
+            <a href="{% url 'terms' %}">Terms</a>
+        </nav>
+    </header>
+
     <div class="container">
         <div class="logo">🧠 Brain Ladder</div>
         <h1>Welcome to the Challenge!</h1>
@@ -127,23 +173,14 @@
 
         {% if user.is_authenticated %}
             <p>👋 Hello, {{ user.username }}!</p>
-            <a href="{% url 'play_level' %}">
-                <button>🎮 Start Game</button>
-            </a>
-            <a href="{% url 'wallet' %}">
-                <button>💰 My Wallet</button>
-            </a>
-            <form method="post" action="{% url 'logout' %}">
-                {% csrf_token %}
+            <a href="{% url 'play_level' %}"><button>🎮 Start Game</button></a>
+            <a href="{% url 'wallet' %}"><button>💰 My Wallet</button></a>
+            <form method="post" action="{% url 'logout' %}">{% csrf_token %}
                 <button type="submit">🚪 Logout</button>
             </form>
         {% else %}
-            <a href="{% url 'signup' %}">
-                <button>📝 Sign Up</button>
-            </a>
-            <a href="{% url 'login' %}">
-                <button>🔐 Login</button>
-            </a>
+            <a href="{% url 'signup' %}"><button>📝 Sign Up</button></a>
+            <a href="{% url 'login' %}"><button>🔐 Login</button></a>
         {% endif %}
 
         <div class="disclaimer">
@@ -151,8 +188,7 @@
             Brain Ladder is a <strong>math-based skill game</strong>.<br>
             No gambling, chance, or betting elements are involved.<br><br>
             You must be at least <strong>18 years old</strong> to play and win rewards.<br>
-            This game complies with applicable Indian IT and skill gaming laws.<br>
-            <br>
+            This game complies with applicable Indian IT and skill gaming laws.<br><br>
             By participating, you acknowledge and accept these terms.
         </div>
     </div>
@@ -161,11 +197,12 @@
         © 2025 Techzniczone LLP. All rights reserved.
     </footer>
 
-    <!-- Optional: Background sound effect -->
-    <!-- 
+    <!-- Optional: Background sound -->
+    <!--
     <audio autoplay loop hidden>
         <source src="{% static 'sounds/menu-music.mp3' %}" type="audio/mpeg">
-    </audio> 
+    </audio>
     -->
+
 </body>
 </html>
