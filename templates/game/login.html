@@ -1,0 +1,115 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Log In - Brain Ladder</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Gaming font -->
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Press Start 2P', cursive;
+            background: #111;
+            color: #f1f1f1;
+            text-align: center;
+            padding: 40px 20px;
+            margin: 0;
+        }
+
+        .container {
+            background-color: #1e1e2f;
+            padding: 30px;
+            border-radius: 16px;
+            display: inline-block;
+            max-width: 90%;
+            box-shadow: 0 0 15px rgba(0, 200, 255, 0.3);
+        }
+
+        h2 {
+            font-size: 16px;
+            margin-bottom: 20px;
+            color: #00c6ff;
+        }
+
+        form {
+            text-align: left;
+            margin: 0 auto;
+            display: inline-block;
+        }
+
+        label, input {
+            display: block;
+            width: 250px;
+            font-size: 10px;
+            margin-bottom: 12px;
+        }
+
+        input {
+            padding: 8px;
+            border: 1px solid #555;
+            border-radius: 6px;
+            background: #2a2a3d;
+            color: white;
+        }
+
+        button {
+            font-family: 'Press Start 2P', cursive;
+            background: linear-gradient(to right, #00c6ff, #0072ff);
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            font-size: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 12px;
+            transition: transform 0.2s ease, background 0.3s ease;
+        }
+
+        button:hover {
+            transform: scale(1.05);
+            background: linear-gradient(to right, #0072ff, #00c6ff);
+        }
+
+        a {
+            display: inline-block;
+            margin-top: 20px;
+            color: #00c6ff;
+            text-decoration: none;
+            font-size: 10px;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .footer {
+            margin-top: 40px;
+            font-size: 8px;
+            color: #888;
+        }
+
+        @media (max-width: 600px) {
+            input {
+                width: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>🔐 Log In</h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Enter</button>
+        </form>
+        <a href="{% url 'signup' %}">📝 Don't have an account? Sign up</a>
+    </div>
+
+    <div class="footer">
+        © 2025 Brain Ladder | Owned by Techzniczone
+    </div>
+</body>
+</html>

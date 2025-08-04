@@ -1,0 +1,100 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Processing Payment... | Brain Ladder</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+    <!-- Gaming Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Press Start 2P', cursive;
+            background-color: #0e0e1c;
+            color: #ffffff;
+            text-align: center;
+            padding-top: 100px;
+            margin: 0;
+        }
+
+        h2 {
+            font-size: 14px;
+            color: #00e6e6;
+            margin-bottom: 20px;
+        }
+
+        .loading-icon {
+            font-size: 32px;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        .footer {
+            margin-top: 60px;
+            font-size: 10px;
+            color: #888;
+        }
+
+        @media (max-width: 600px) {
+            h2 {
+                font-size: 12px;
+                padding: 0 10px;
+            }
+
+            .loading-icon {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h2>🧠 Hold tight... Redirecting to Razorpay</h2>
+    <div class="loading-icon">💳</div>
+
+    <script>
+        var options = {
+            "key": "{{ razorpay_key_id }}",
+            "amount": "{{ amount }}",
+            "currency": "INR",
+            "name": "Brain Ladder Wallet",
+            "description": "Wallet Top-up",
+            "order_id": "{{ order_id }}",
+            "handler": function (response) {
+                fetch("{% url 'payment_success' %}", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRFToken": "{{ csrf_token }}"
+                    },
+                    body: JSON.stringify(response)
+                }).then(res => res.json())
+                  .then(data => {
+                      alert("✅ Funds added to your Play Wallet!");
+                      window.location.href = "{% url 'wallet' %}";
+                  });
+            },
+            "theme": {
+                "color": "#00e6e6"
+            }
+        };
+        var rzp1 = new Razorpay(options);
+        rzp1.open();
+
+        rzp1.on('payment.failed', function (response){
+            alert("❌ Payment failed or cancelled.");
+            window.location.href = "{% url 'wallet' %}";
+        });
+    </script>
+
+    <div class="footer">
+        © 2025 Brain Ladder | Owned by Techzniczone
+    </div>
+</body>
+</html>

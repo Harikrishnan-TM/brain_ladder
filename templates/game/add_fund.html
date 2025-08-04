@@ -1,0 +1,151 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Funds - Brain Ladder</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Gaming-style font -->
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Press Start 2P', cursive;
+            background-color: #0f0f1a;
+            color: white;
+            text-align: center;
+            padding: 40px 20px;
+            margin: 0;
+        }
+
+        .container {
+            background-color: #1a1a2e;
+            padding: 30px;
+            border-radius: 16px;
+            display: inline-block;
+            max-width: 90%;
+            box-shadow: 0 0 20px rgba(0, 200, 255, 0.3);
+        }
+
+        h2 {
+            font-size: 16px;
+            color: #00ffcc;
+            margin-bottom: 20px;
+        }
+
+        p {
+            font-size: 12px;
+            margin-bottom: 20px;
+        }
+
+        form {
+            margin-top: 20px;
+        }
+
+        label, input {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 10px;
+            display: block;
+            margin: 10px auto;
+            width: 80%;
+        }
+
+        input[type="number"] {
+            padding: 10px;
+            border-radius: 6px;
+            border: none;
+            text-align: center;
+        }
+
+        button {
+            font-family: 'Press Start 2P', cursive;
+            background: linear-gradient(to right, #00c6ff, #0072ff);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            font-size: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.2s ease;
+        }
+
+        button:hover {
+            background: linear-gradient(to right, #0072ff, #00c6ff);
+            transform: scale(1.05);
+        }
+
+        a {
+            display: inline-block;
+            margin-top: 20px;
+            font-size: 10px;
+            color: #00c6ff;
+            text-decoration: none;
+        }
+
+        a:hover {
+            color: #00ffff;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            font-size: 10px;
+            color: #00ffcc;
+        }
+
+        .footer {
+            margin-top: 40px;
+            font-size: 8px;
+            color: #888;
+        }
+
+        @media (max-width: 600px) {
+            label, input {
+                font-size: 8px;
+            }
+
+            button {
+                font-size: 8px;
+                padding: 10px 16px;
+            }
+
+            h2 {
+                font-size: 14px;
+            }
+
+            p {
+                font-size: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>➕ Add Funds to Play Wallet</h2>
+
+        <p><strong>Current Balance:</strong> ₹{{ play_wallet.balance }}</p>
+
+        {% if messages %}
+            <ul>
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        <form method="POST">
+            {% csrf_token %}
+            <label for="amount">Enter Amount (₹):</label>
+            <input type="number" name="amount" id="amount" min="1" step="1" required>
+            <button type="submit">Add Funds</button>
+        </form>
+
+        <a href="{% url 'wallet' %}">← Back to Wallet</a>
+    </div>
+
+    <div class="footer">
+        © 2025 Brain Ladder | Owned by Techzniczone
+    </div>
+</body>
+</html>
