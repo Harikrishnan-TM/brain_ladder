@@ -13,6 +13,8 @@ from .forms import KYCForm
 
 from django.contrib.auth.forms import UserCreationForm
 
+from .models import UserProfile
+
 
 
 
@@ -280,7 +282,16 @@ def submit_kyc(request):
 @login_required
 def payout_status(request):
     payouts = PayoutRequest.objects.filter(user=request.user).order_by('-requested_at')
-    return render(request, 'game/payout_status.html', {'payouts': payouts})
+
+    try:
+        user_message = request.user.userprofile.payout_message
+    except UserProfile.DoesNotExist:
+        user_message = ""
+
+    return render(request, 'game/payout_status.html', {
+        'payouts': payouts,
+        'user_message': user_message
+    })
 
 
 

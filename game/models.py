@@ -65,3 +65,11 @@ class KYC(models.Model):
 
     def __str__(self):
         return f"KYC for {self.user.username}"
+
+
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    payout_message = models.TextField(blank=True, null=True)
+
+    def __str__(self):
+        return f"Profile of {self.user.username}"

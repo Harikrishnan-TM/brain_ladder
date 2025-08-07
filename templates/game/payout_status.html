@@ -35,6 +35,13 @@
             margin-bottom: 20px;
         }
 
+        .user-message {
+            color: #ffcc00;
+            font-size: 10px;
+            margin-top: -10px;
+            margin-bottom: 20px;
+        }
+
         table {
             width: 100%;
             border-collapse: collapse;
@@ -93,6 +100,10 @@
 <body>
     <div class="container">
         <h2>💸 Withdrawal History</h2>
+
+        {% if user_message %}
+            <p class="user-message">⚠️ {{ user_message }}</p>
+        {% endif %}
 
         {% if payouts %}
             <table>

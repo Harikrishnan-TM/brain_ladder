@@ -2,6 +2,7 @@ from django.contrib import admin
 from .models import Question, GameSession, Answer
 from .models import PlayWallet
 from .models import PayoutRequest, Wallet
+from .models import UserProfile
 
 admin.site.register(Question)
 admin.site.register(GameSession)
@@ -17,3 +18,11 @@ class PayoutRequestAdmin(admin.ModelAdmin):
 
 admin.site.register(Wallet)
 
+
+
+
+
+@admin.register(UserProfile)
+class UserProfileAdmin(admin.ModelAdmin):
+    list_display = ('user', 'payout_message')
+    search_fields = ('user__username',)
