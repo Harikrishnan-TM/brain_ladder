@@ -15,6 +15,10 @@ from django.contrib.auth.forms import UserCreationForm
 
 from .models import UserProfile
 
+from .models import Wallet
+
+
+
 
 
 
@@ -44,7 +48,15 @@ REWARD_BY_CORRECT_COUNT = {
 from django.shortcuts import render
 
 def home(request):
-    return render(request, 'home.html')
+    # Get top wallets ordered by balance (top earners with balance > 0)
+    top_wallets = Wallet.objects.select_related('user').filter(
+        balance__gt=0
+    ).order_by('-balance')[:8]
+    
+    context = {
+        'top_wallets': top_wallets,
+    }
+    return render(request, 'home.html', context)
 
 def about(request):
     return render(request, 'about.html')
