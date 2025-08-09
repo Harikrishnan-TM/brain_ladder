@@ -7,166 +7,356 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Poppins:wght@400;600;700&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
 
     <style>
+        * {
+            box-sizing: border-box;
+        }
+
         body {
             margin: 0;
             padding: 0;
             font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            background: linear-gradient(135deg, #0c0c1d, #1a1a2e, #16213e);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
             color: white;
             display: flex;
             flex-direction: column;
             min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Floating particles background */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            background: radial-gradient(circle, #00c6ff, transparent);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+            opacity: 0.1;
+        }
+
+        .particle:nth-child(1) { width: 4px; height: 4px; left: 10%; animation-delay: 0s; }
+        .particle:nth-child(2) { width: 6px; height: 6px; left: 20%; animation-delay: 2s; }
+        .particle:nth-child(3) { width: 3px; height: 3px; left: 30%; animation-delay: 4s; }
+        .particle:nth-child(4) { width: 5px; height: 5px; left: 40%; animation-delay: 1s; }
+        .particle:nth-child(5) { width: 4px; height: 4px; left: 50%; animation-delay: 3s; }
+        .particle:nth-child(6) { width: 7px; height: 7px; left: 60%; animation-delay: 5s; }
+        .particle:nth-child(7) { width: 3px; height: 3px; left: 70%; animation-delay: 2s; }
+        .particle:nth-child(8) { width: 5px; height: 5px; left: 80%; animation-delay: 4s; }
+        .particle:nth-child(9) { width: 4px; height: 4px; left: 90%; animation-delay: 1s; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.1; }
+            90% { opacity: 0.1; }
+            50% { transform: translateY(-10px) rotate(180deg); opacity: 0.3; }
         }
 
         header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background-color: #000000cc;
-            padding: 10px 20px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.7);
+            background: linear-gradient(135deg, #000000dd, #1a1a2edd);
+            padding: 15px 25px;
+            box-shadow: 0 4px 20px rgba(0, 198, 255, 0.3);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0, 198, 255, 0.2);
+            z-index: 100;
+            position: relative;
         }
 
         .logo-header {
-            font-family: 'Press Start 2P', cursive;
-            font-size: 16px;
+            font-family: 'Orbitron', monospace;
+            font-size: 18px;
+            font-weight: 700;
             color: #f1c40f;
-            text-shadow: 1px 1px 2px #000;
+            text-shadow: 0 0 10px #f1c40f, 0 0 20px #f1c40f, 0 0 30px #f1c40f;
+            animation: logoGlow 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes logoGlow {
+            from { text-shadow: 0 0 10px #f1c40f, 0 0 20px #f1c40f; }
+            to { text-shadow: 0 0 20px #f1c40f, 0 0 30px #f1c40f, 0 0 40px #f1c40f; }
+        }
+
+        nav {
+            display: flex;
+            gap: 20px;
         }
 
         nav a {
             color: #fff;
-            margin: 0 10px;
             text-decoration: none;
-            font-size: 13px;
-            transition: color 0.3s;
+            font-size: 14px;
+            font-weight: 600;
+            padding: 8px 16px;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        nav a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 198, 255, 0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        nav a:hover::before {
+            left: 100%;
         }
 
         nav a:hover {
-            color: #f1c40f;
+            color: #00c6ff;
+            background: rgba(0, 198, 255, 0.1);
+            transform: translateY(-2px);
         }
 
-        .container {
-            background-color: rgba(0, 0, 0, 0.75);
+        .hero-section {
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.8), rgba(26, 26, 46, 0.8));
             margin: 40px auto;
-            padding: 30px 20px;
-            border-radius: 20px;
-            max-width: 90%;
+            padding: 40px 30px;
+            border-radius: 25px;
+            max-width: 95%;
             text-align: center;
+            backdrop-filter: blur(15px);
+            border: 2px solid rgba(0, 198, 255, 0.3);
+            box-shadow: 0 0 50px rgba(0, 198, 255, 0.2);
+            position: relative;
+            z-index: 10;
         }
 
         .logo {
-            font-family: 'Press Start 2P', cursive;
-            font-size: 26px;
-            color: #f1c40f;
-            text-shadow: 2px 2px 4px #000;
-            margin-bottom: 20px;
+            font-family: 'Orbitron', monospace;
+            font-size: 32px;
+            font-weight: 900;
+            background: linear-gradient(45deg, #f1c40f, #00c6ff, #00ffcc);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: textShine 3s ease-in-out infinite;
+            margin-bottom: 25px;
+            text-shadow: 0 0 30px rgba(241, 196, 15, 0.5);
+        }
+
+        @keyframes textShine {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
         }
 
         h1 {
             font-family: 'Press Start 2P', cursive;
-            font-size: 18px;
-            margin-bottom: 20px;
+            font-size: 20px;
+            margin-bottom: 25px;
+            color: #ffffff;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
         }
 
         p {
-            font-size: 14px;
-            margin-bottom: 25px;
+            font-size: 16px;
+            margin-bottom: 30px;
+            line-height: 1.6;
+            color: #e0e0e0;
         }
 
-        button {
+        .button-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin: 30px 0;
+        }
+
+        button, .game-button {
             font-family: 'Poppins', sans-serif;
-            background: linear-gradient(to right, #00c6ff, #0072ff);
+            background: linear-gradient(135deg, #00c6ff, #0072ff);
             color: white;
             border: none;
-            padding: 12px 20px;
-            font-size: 12px;
-            margin: 8px;
-            border-radius: 8px;
+            padding: 15px 25px;
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 15px;
             cursor: pointer;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
-            transition: transform 0.2s ease, background 0.3s ease;
+            box-shadow: 0 6px 20px rgba(0, 198, 255, 0.4);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
         }
 
-        button:hover {
-            transform: scale(1.05);
-            background: linear-gradient(to right, #0072ff, #00c6ff);
+        button::before, .game-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        button:hover::before, .game-button:hover::before {
+            left: 100%;
+        }
+
+        button:hover, .game-button:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 10px 30px rgba(0, 198, 255, 0.6);
+            background: linear-gradient(135deg, #0072ff, #00c6ff);
+        }
+
+        button:active, .game-button:active {
+            transform: translateY(-1px) scale(1.02);
         }
 
         form {
             display: inline;
         }
 
-        .disclaimer {
-            background-color: rgba(255, 255, 255, 0.08);
+        /* Stats Counter */
+        .stats-section {
+            display: flex;
+            justify-content: space-around;
+            margin: 30px 0;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .stat-item {
+            text-align: center;
+            background: linear-gradient(135deg, rgba(0, 198, 255, 0.1), rgba(0, 255, 204, 0.1));
             padding: 20px;
-            margin-top: 30px;
-            border-radius: 12px;
+            border-radius: 15px;
+            border: 1px solid rgba(0, 198, 255, 0.3);
+            backdrop-filter: blur(10px);
+            flex: 1;
+            min-width: 120px;
+        }
+
+        .stat-number {
+            font-family: 'Orbitron', monospace;
+            font-size: 24px;
+            font-weight: 700;
+            color: #00c6ff;
+            text-shadow: 0 0 10px rgba(0, 198, 255, 0.5);
+        }
+
+        .stat-label {
             font-size: 12px;
+            color: #a0a0a0;
+            margin-top: 5px;
+            font-weight: 600;
+        }
+
+        .disclaimer {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.1));
+            padding: 25px;
+            margin-top: 35px;
+            border-radius: 15px;
+            font-size: 13px;
             text-align: left;
             color: #f0f0f0;
+            border-left: 4px solid #f1c40f;
+            backdrop-filter: blur(10px);
         }
 
-        footer {
-            background-color: #000;
-            color: #bbb;
-            padding: 15px;
-            font-size: 13px;
-            text-align: center;
-            margin-top: auto;
-        }
-
-        /* Latest Players Section */
+        /* Enhanced Players Section */
         .players-section {
-            margin: 30px 0;
-            padding: 20px 0;
+            margin: 40px 0;
+            padding: 30px 0;
             background: linear-gradient(45deg, #0a0a1a, #1a1a2e);
-            border-top: 2px solid #00c6ff;
-            border-bottom: 2px solid #00c6ff;
+            border-top: 3px solid #00c6ff;
+            border-bottom: 3px solid #00c6ff;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .players-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 198, 255, 0.05), transparent);
+            animation: sectionSweep 8s ease-in-out infinite;
+        }
+
+        @keyframes sectionSweep {
+            0%, 100% { left: -100%; }
+            50% { left: 100%; }
         }
 
         .section-title {
-            font-family: 'Press Start 2P', cursive;
-            font-size: 16px;
+            font-family: 'Orbitron', monospace;
+            font-size: 18px;
+            font-weight: 700;
             color: #00ffcc;
             text-align: center;
-            margin-bottom: 20px;
-            text-shadow: 0 0 10px rgba(0, 255, 204, 0.5);
-            animation: glow 2s ease-in-out infinite alternate;
+            margin-bottom: 25px;
+            text-shadow: 0 0 15px rgba(0, 255, 204, 0.8);
+            animation: titlePulse 2s ease-in-out infinite alternate;
+            position: relative;
+            z-index: 10;
         }
 
-        @keyframes glow {
-            from { text-shadow: 0 0 10px rgba(0, 255, 204, 0.5); }
-            to { text-shadow: 0 0 20px rgba(0, 255, 204, 0.8), 0 0 30px rgba(0, 255, 204, 0.6); }
+        @keyframes titlePulse {
+            from { text-shadow: 0 0 15px rgba(0, 255, 204, 0.8); transform: scale(1); }
+            to { text-shadow: 0 0 25px rgba(0, 255, 204, 1), 0 0 35px rgba(0, 255, 204, 0.8); transform: scale(1.02); }
         }
 
         .players-container {
             overflow: hidden;
             white-space: nowrap;
             position: relative;
+            z-index: 10;
         }
 
         .players-scroll {
             display: inline-flex;
-            gap: 15px;
-            animation: scroll-players 25s linear infinite;
+            gap: 20px;
+            animation: scroll-players 30s linear infinite;
         }
 
         .player-card {
-            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            background: linear-gradient(135deg, #1a1a2e, #16213e, #0f0f1a);
             border: 2px solid #00c6ff;
-            border-radius: 15px;
-            padding: 15px;
-            min-width: 200px;
+            border-radius: 20px;
+            padding: 20px;
+            min-width: 220px;
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 15px;
             flex-shrink: 0;
-            box-shadow: 0 0 15px rgba(0, 198, 255, 0.3);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 0 25px rgba(0, 198, 255, 0.4);
+            transition: all 0.4s ease;
             position: relative;
             overflow: hidden;
         }
@@ -174,32 +364,37 @@
         .player-card::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
-            transition: left 0.5s;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #00c6ff, #00ffcc, #f1c40f);
+            border-radius: 20px;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.4s ease;
         }
 
         .player-card:hover::before {
-            left: 100%;
+            opacity: 1;
         }
 
         .player-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 25px rgba(0, 198, 255, 0.5);
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 10px 40px rgba(0, 198, 255, 0.8);
         }
 
         .player-rank {
-            font-family: 'Press Start 2P', cursive;
-            font-size: 12px;
+            font-family: 'Orbitron', monospace;
+            font-size: 14px;
+            font-weight: 700;
             color: #f1c40f;
-            background: rgba(241, 196, 15, 0.2);
-            padding: 5px 8px;
-            border-radius: 8px;
-            min-width: 30px;
+            background: linear-gradient(135deg, rgba(241, 196, 15, 0.2), rgba(241, 196, 15, 0.1));
+            padding: 8px 12px;
+            border-radius: 12px;
+            min-width: 40px;
             text-align: center;
+            border: 1px solid rgba(241, 196, 15, 0.3);
         }
 
         .player-info {
@@ -208,46 +403,44 @@
 
         .player-name {
             font-family: 'Press Start 2P', cursive;
-            font-size: 10px;
+            font-size: 11px;
             color: #ffffff;
-            margin-bottom: 5px;
+            margin-bottom: 8px;
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
         }
 
         .player-score {
-            font-family: 'Poppins', sans-serif;
-            font-size: 14px;
-            font-weight: 600;
+            font-family: 'Orbitron', monospace;
+            font-size: 16px;
+            font-weight: 700;
             color: #00ffcc;
-            text-shadow: 0 0 5px rgba(0, 255, 204, 0.5);
+            text-shadow: 0 0 10px rgba(0, 255, 204, 0.8);
         }
 
         .player-badge {
-            font-size: 20px;
-            animation: bounce 2s infinite;
+            font-size: 24px;
+            animation: badgeBounce 2.5s infinite;
+            filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.8));
         }
 
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-5px); }
+        @keyframes badgeBounce {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            25% { transform: translateY(-3px) rotate(5deg); }
+            75% { transform: translateY(-3px) rotate(-5deg); }
         }
 
         @keyframes scroll-players {
-            0% {
-                transform: translateX(0);
-            }
-            100% {
-                transform: translateX(-50%);
-            }
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
         }
 
-        /* Pause players animation on hover */
         .players-container:hover .players-scroll {
             animation-play-state: paused;
         }
 
-        /* Auto-scrolling Posters Section */
+        /* Enhanced Posters Section */
         .posters-container {
-            margin: 30px 0;
+            margin: 40px 0;
             overflow: hidden;
             white-space: nowrap;
             position: relative;
@@ -255,224 +448,301 @@
 
         .posters {
             display: inline-flex;
-            gap: 20px;
-            animation: scroll-left 20s linear infinite;
+            gap: 25px;
+            animation: scroll-left 25s linear infinite;
         }
 
         .poster {
             background: linear-gradient(45deg, #ff416c, #ff4b2b);
-            border-radius: 20px;
-            padding: 30px 20px;
+            border-radius: 25px;
+            padding: 35px 25px;
             font-family: 'Press Start 2P', cursive;
-            font-size: 14px;
+            font-size: 16px;
             color: white;
             text-align: center;
-            width: 180px;
-            height: 100px;
+            width: 200px;
+            height: 120px;
             display: flex;
             justify-content: center;
             align-items: center;
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+            box-shadow: 0 0 30px rgba(255, 65, 108, 0.4);
             flex-shrink: 0;
-            animation: pulse 3s infinite;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .poster::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+            transform: translateX(-100%) rotate(45deg);
+            transition: transform 0.6s ease;
+        }
+
+        .poster:hover::before {
+            transform: translateX(100%) rotate(45deg);
+        }
+
+        .poster:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 40px rgba(255, 65, 108, 0.6);
         }
 
         .poster:nth-child(2) {
             background: linear-gradient(45deg, #36d1dc, #5b86e5);
+            box-shadow: 0 0 30px rgba(54, 209, 220, 0.4);
+        }
+
+        .poster:nth-child(2):hover {
+            box-shadow: 0 0 40px rgba(54, 209, 220, 0.6);
         }
 
         .poster:nth-child(3) {
             background: linear-gradient(45deg, #ff9a9e, #fad0c4);
             color: #000;
+            box-shadow: 0 0 30px rgba(255, 154, 158, 0.4);
+        }
+
+        .poster:nth-child(3):hover {
+            box-shadow: 0 0 40px rgba(255, 154, 158, 0.6);
         }
 
         .poster:nth-child(4) {
             background: linear-gradient(45deg, #00c9ff, #92fe9d);
+            box-shadow: 0 0 30px rgba(0, 201, 255, 0.4);
+        }
+
+        .poster:nth-child(4):hover {
+            box-shadow: 0 0 40px rgba(0, 201, 255, 0.6);
         }
 
         .poster:nth-child(5) {
             background: linear-gradient(45deg, #f7971e, #ffd200);
             color: #000;
+            box-shadow: 0 0 30px rgba(247, 151, 30, 0.4);
+        }
+
+        .poster:nth-child(5):hover {
+            box-shadow: 0 0 40px rgba(247, 151, 30, 0.6);
         }
 
         .poster:nth-child(6) {
             background: linear-gradient(45deg, #c33764, #1d2671);
+            box-shadow: 0 0 30px rgba(195, 55, 100, 0.4);
         }
 
-        /* Duplicate posters for seamless loop */
-        .poster:nth-child(7) {
-            background: linear-gradient(45deg, #ff416c, #ff4b2b);
+        .poster:nth-child(6):hover {
+            box-shadow: 0 0 40px rgba(195, 55, 100, 0.6);
         }
 
-        .poster:nth-child(8) {
-            background: linear-gradient(45deg, #36d1dc, #5b86e5);
-        }
-
-        .poster:nth-child(9) {
-            background: linear-gradient(45deg, #ff9a9e, #fad0c4);
-            color: #000;
-        }
-
-        .poster:nth-child(10) {
-            background: linear-gradient(45deg, #00c9ff, #92fe9d);
-        }
-
-        .poster:nth-child(11) {
-            background: linear-gradient(45deg, #f7971e, #ffd200);
-            color: #000;
-        }
-
-        .poster:nth-child(12) {
-            background: linear-gradient(45deg, #c33764, #1d2671);
-        }
+        /* Duplicate posters with same styling */
+        .poster:nth-child(7) { background: linear-gradient(45deg, #ff416c, #ff4b2b); }
+        .poster:nth-child(8) { background: linear-gradient(45deg, #36d1dc, #5b86e5); }
+        .poster:nth-child(9) { background: linear-gradient(45deg, #ff9a9e, #fad0c4); color: #000; }
+        .poster:nth-child(10) { background: linear-gradient(45deg, #00c9ff, #92fe9d); }
+        .poster:nth-child(11) { background: linear-gradient(45deg, #f7971e, #ffd200); color: #000; }
+        .poster:nth-child(12) { background: linear-gradient(45deg, #c33764, #1d2671); }
 
         @keyframes scroll-left {
-            0% {
-                transform: translateX(0);
-            }
-            100% {
-                transform: translateX(-50%);
-            }
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
         }
 
-        @keyframes pulse {
-            0% { transform: scale(1); box-shadow: 0 0 20px rgba(255,255,255,0.2); }
-            50% { transform: scale(1.05); box-shadow: 0 0 30px rgba(255,255,255,0.4); }
-            100% { transform: scale(1); box-shadow: 0 0 20px rgba(255,255,255,0.2); }
-        }
-
-        /* Pause animation on hover */
         .posters-container:hover .posters {
             animation-play-state: paused;
         }
 
-        @media (max-width: 600px) {
-            button {
-                font-size: 10px;
-                padding: 10px 14px;
-            }
+        footer {
+            background: linear-gradient(135deg, #000, #1a1a2e);
+            color: #bbb;
+            padding: 20px;
+            font-size: 14px;
+            text-align: center;
+            margin-top: auto;
+            border-top: 2px solid rgba(0, 198, 255, 0.3);
+        }
 
-            .logo, .logo-header {
-                font-size: 20px;
-            }
-
-            h1 {
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .logo-header {
                 font-size: 14px;
             }
 
-            p, nav a {
-                font-size: 11px;
-            }
-
-            .disclaimer {
-                font-size: 10px;
-            }
-
-            footer {
-                font-size: 11px;
-            }
-
             nav {
+                gap: 10px;
                 flex-wrap: wrap;
                 justify-content: center;
             }
 
-            .section-title {
+            nav a {
                 font-size: 12px;
+                padding: 6px 12px;
             }
 
-            .player-card {
-                min-width: 170px;
-                padding: 12px;
+            .hero-section {
+                padding: 30px 20px;
+                margin: 20px 10px;
             }
 
-            .player-rank {
-                font-size: 10px;
-                padding: 4px 6px;
+            .logo {
+                font-size: 24px;
             }
 
-            .player-name {
-                font-size: 8px;
-            }
-
-            .player-score {
-                font-size: 12px;
-            }
-
-            .player-badge {
+            h1 {
                 font-size: 16px;
             }
 
+            p {
+                font-size: 14px;
+            }
+
+            button, .game-button {
+                font-size: 12px;
+                padding: 12px 20px;
+            }
+
+            .stats-section {
+                gap: 10px;
+            }
+
+            .stat-item {
+                padding: 15px;
+            }
+
+            .stat-number {
+                font-size: 18px;
+            }
+
+            .section-title {
+                font-size: 14px;
+            }
+
+            .player-card {
+                min-width: 180px;
+                padding: 15px;
+            }
+
+            .player-rank {
+                font-size: 12px;
+                padding: 6px 10px;
+            }
+
+            .player-name {
+                font-size: 9px;
+            }
+
+            .player-score {
+                font-size: 14px;
+            }
+
+            .player-badge {
+                font-size: 18px;
+            }
+
             .poster {
-                font-size: 10px;
-                width: 150px;
-                height: 80px;
+                font-size: 12px;
+                width: 160px;
+                height: 100px;
+                padding: 25px 20px;
             }
 
-            @keyframes scroll-left {
-                0% {
-                    transform: translateX(0);
-                }
-                100% {
-                    transform: translateX(-50%);
-                }
+            .disclaimer {
+                font-size: 11px;
+                padding: 20px;
             }
 
-            @keyframes scroll-players {
-                0% {
-                    transform: translateX(0);
-                }
-                100% {
-                    transform: translateX(-50%);
-                }
+            footer {
+                font-size: 12px;
+                padding: 15px;
             }
         }
     </style>
 </head>
 <body>
 
+<!-- Floating Particles Background -->
+<div class="particles">
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+</div>
+
 <header>
-    <div class="logo-header">🎯 Brain Ladder</div>
+    <div class="logo-header">🎯 BRAIN LADDER</div>
     <nav>
-        <a href="{% url 'home' %}">Home</a>
-        <a href="{% url 'about' %}">About Us</a>
-        <a href="{% url 'contact' %}">Contact</a>
-        <a href="{% url 'privacy_policy' %}">Privacy</a>
-        <a href="{% url 'refund_policy' %}">Refund Policy</a>
-        <a href="{% url 'terms' %}">Terms</a>
+        <a href="{% url 'home' %}">🏠 Home</a>
+        <a href="{% url 'about' %}">ℹ️ About</a>
+        <a href="{% url 'contact' %}">📞 Contact</a>
+        <a href="{% url 'privacy_policy' %}">🔒 Privacy</a>
+        <a href="{% url 'refund_policy' %}">💰 Refund</a>
+        <a href="{% url 'terms' %}">📋 Terms</a>
     </nav>
 </header>
 
-<div class="container">
-    <div class="logo">🧠 Brain Ladder</div>
-    <h1>Welcome to the Challenge!</h1>
-    <p>Test your math skill, climb the ladder, and win real rewards!</p>
+<div class="hero-section">
+    <div class="logo">🧠 BRAIN LADDER</div>
+    <h1>ULTIMATE BRAIN CHALLENGE!</h1>
+    <p>🚀 Test your mathematical prowess, conquer challenging levels, and earn real rewards in the most exciting skill-based gaming experience!</p>
+
+    <!-- Live Stats Section -->
+    <div class="stats-section">
+        <div class="stat-item">
+            <div class="stat-number" id="totalPlayers">{{ total_players|default:"0" }}</div>
+            <div class="stat-label">Active Players</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number">₹{{ total_rewards|default:"0" }}</div>
+            <div class="stat-label">Total Rewards</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number">{{ games_played|default:"0" }}</div>
+            <div class="stat-label">Games Played</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number">5</div>
+            <div class="stat-label">Difficulty Levels</div>
+        </div>
+    </div>
 
     {% if user.is_authenticated %}
-        <p>👋 Hello, {{ user.username }}!</p>
-        <a href="{% url 'play_level' %}"><button>🎮 Start Game</button></a>
-        <a href="{% url 'wallet' %}"><button>💰 My Wallet</button></a>
-        <form method="post" action="{% url 'logout' %}">{% csrf_token %}
-            <button type="submit">🚪 Logout</button>
-        </form>
+        <p style="font-size: 18px; margin: 20px 0;">👋 Welcome back, <strong>{{ user.username }}</strong>! Ready for your next challenge?</p>
+        <div class="button-container">
+            <a href="{% url 'play_level' %}" class="game-button">🎮 START GAME</a>
+            <a href="{% url 'wallet' %}" class="game-button">💰 MY WALLET</a>
+            <form method="post" action="{% url 'logout' %}">{% csrf_token %}
+                <button type="submit">🚪 LOGOUT</button>
+            </form>
+        </div>
     {% else %}
-        <a href="{% url 'signup' %}"><button>📝 Sign Up</button></a>
-        <a href="{% url 'login' %}"><button>🔐 Login</button></a>
+        <div class="button-container">
+            <a href="{% url 'signup' %}" class="game-button">📝 JOIN NOW</a>
+            <a href="{% url 'login' %}" class="game-button">🔐 LOGIN</a>
+        </div>
     {% endif %}
 
     <div class="disclaimer">
-        <strong>⚠️ Disclaimer:</strong><br>
-        Brain Ladder is a <strong>math-based skill game</strong>.<br>
-        No gambling, chance, or betting elements are involved.<br><br>
-        You must be at least <strong>18 years old</strong> to play and win rewards.<br>
-        This game complies with applicable Indian IT and skill gaming laws.<br><br>
-        By participating, you acknowledge and accept these terms.
+        <strong>⚠️ LEGAL DISCLAIMER:</strong><br>
+        Brain Ladder is a <strong>100% skill-based mathematical game</strong>. No gambling, chance, or betting elements involved. 
+        Players must be <strong>18+ years old</strong> to participate and win real money rewards. 
+        This platform fully complies with Indian IT laws and skill gaming regulations. 
+        By participating, you acknowledge these terms and confirm your eligibility.
     </div>
-</div> <!-- end of container -->
+</div>
 
-<!-- Latest Players Scrolling Section -->
+<!-- Latest Champions Section -->
 <div class="players-section">
-    <h3 class="section-title">🏆 LATEST CHAMPIONS 🏆</h3>
+    <h3 class="section-title">🏆 HALL OF CHAMPIONS 🏆</h3>
     <div class="players-container">
         <div class="players-scroll">
             {% for wallet in top_wallets %}
@@ -484,16 +754,21 @@
                     </div>
                     <div class="player-badge">
                         {% if forloop.counter == 1 %}🥇
-                        {% elif forloop.counter == 2 %}🥈
-                        {% elif forloop.counter == 3 %}🥉
-                        {% else %}⭐{% endif %}
+                        {% else %}
+                            {% if forloop.counter == 2 %}🥈
+                            {% else %}
+                                {% if forloop.counter == 3 %}🥉
+                                {% else %}⭐
+                                {% endif %}
+                            {% endif %}
+                        {% endif %}
                     </div>
                 </div>
             {% empty %}
                 <div class="player-card">
                     <div class="player-rank">#1</div>
                     <div class="player-info">
-                        <div class="player-name">No players yet</div>
+                        <div class="player-name">BE THE FIRST CHAMPION!</div>
                         <div class="player-score">₹0</div>
                     </div>
                     <div class="player-badge">🎯</div>
@@ -509,46 +784,46 @@
                     </div>
                     <div class="player-badge">
                         {% if forloop.counter == 1 %}🥇
-                        {% elif forloop.counter == 2 %}🥈
-                        {% elif forloop.counter == 3 %}🥉
-                        {% else %}⭐{% endif %}
+                        {% else %}
+                            {% if forloop.counter == 2 %}🥈
+                            {% else %}
+                                {% if forloop.counter == 3 %}🥉
+                                {% else %}⭐
+                                {% endif %}
+                            {% endif %}
+                        {% endif %}
                     </div>
-                </div>
-            {% empty %}
-                <div class="player-card">
-                    <div class="player-rank">#1</div>
-                    <div class="player-info">
-                        <div class="player-name">No players yet</div>
-                        <div class="player-score">₹0</div>
-                    </div>
-                    <div class="player-badge">🎯</div>
                 </div>
             {% endfor %}
-        </div>
-    </div>
-</div>
 
-<!-- Auto-scrolling Posters section -->
+          
+        </div> <!-- end players-scroll -->
+    </div> <!-- end players-container -->
+</div> <!-- end players-section -->
+
+<!-- Posters Section -->
 <div class="posters-container">
     <div class="posters">
-        <div class="poster">Play & Win!</div>
-        <div class="poster">Brain = Money</div>
-        <div class="poster">Crack the Quiz!</div>
-        <div class="poster">Think. Tap. Earn.</div>
-        <div class="poster">Prove You're Smart!</div>
-        <div class="poster">Cash for Skills!</div>
-        <!-- Duplicated for seamless loop -->
-        <div class="poster">Play & Win!</div>
-        <div class="poster">Brain = Money</div>
-        <div class="poster">Crack the Quiz!</div>
-        <div class="poster">Think. Tap. Earn.</div>
-        <div class="poster">Prove You're Smart!</div>
-        <div class="poster">Cash for Skills!</div>
+        <div class="poster">🔥 DAILY CHALLENGE</div>
+        <div class="poster">⚡ SPEED MATH</div>
+        <div class="poster">📈 CLIMB RANKS</div>
+        <div class="poster">💰 WIN REWARDS</div>
+        <div class="poster">🎯 AIM HIGH</div>
+        <div class="poster">🏆 BE A CHAMP</div>
+
+        <!-- Duplicate posters for seamless scroll -->
+        <div class="poster">🔥 DAILY CHALLENGE</div>
+        <div class="poster">⚡ SPEED MATH</div>
+        <div class="poster">📈 CLIMB RANKS</div>
+        <div class="poster">💰 WIN REWARDS</div>
+        <div class="poster">🎯 AIM HIGH</div>
+        <div class="poster">🏆 BE A CHAMP</div>
     </div>
 </div>
 
+<!-- Footer -->
 <footer>
-    © 2025 Techzniczone LLP. All rights reserved.
+    &copy; {{ current_year|default:"2025" }} Brain Ladder. All rights reserved.
 </footer>
 
 </body>
