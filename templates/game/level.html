@@ -1,4 +1,3 @@
-{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,127 +7,574 @@
     
     <!-- Gaming Font -->
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-
+    
     <style>
-        body {
-            font-family: 'Press Start 2P', cursive;
-            background-color: #0f0f1a;
-            color: #f1f1f1;
-            text-align: center;
-            padding: 40px 20px;
-            margin: 0;
+        * {
+            box-sizing: border-box;
         }
 
-        .container {
-            background: #1a1a2e;
-            padding: 30px;
-            border-radius: 16px;
-            display: inline-block;
-            max-width: 90%;
-            box-shadow: 0 0 20px rgba(0, 200, 255, 0.3);
+        body {
+            font-family: 'Press Start 2P', cursive;
+            background: linear-gradient(135deg, #0f0f1a 0%, #1a0f2e 50%, #2e0f1a 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 8s ease infinite;
+            color: #f1f1f1;
+            text-align: center;
+            padding: 20px;
+            margin: 0;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Floating particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #00c6ff;
+            border-radius: 50%;
+            animation: float 6s infinite ease-in-out;
+            opacity: 0.7;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.7; }
+            90% { opacity: 0.7; }
+            100% { transform: translateY(-10px) rotate(360deg); opacity: 0; }
+        }
+
+        .game-container {
+            position: relative;
+            z-index: 10;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .level-header {
+            background: linear-gradient(45deg, #ff6b35, #f7931e);
+            padding: 15px 30px;
+            border-radius: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 0 30px rgba(255, 107, 53, 0.5);
+            animation: pulseGlow 2s ease-in-out infinite alternate;
+            position: relative;
+        }
+
+        @keyframes pulseGlow {
+            from { box-shadow: 0 0 30px rgba(255, 107, 53, 0.5); }
+            to { box-shadow: 0 0 50px rgba(255, 107, 53, 0.8); }
+        }
+
+        .level-header::before {
+            content: "⭐";
+            position: absolute;
+            left: -15px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 24px;
+            animation: spin 3s linear infinite;
+        }
+
+        .level-header::after {
+            content: "⭐";
+            position: absolute;
+            right: -15px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 24px;
+            animation: spin 3s linear infinite reverse;
+        }
+
+        @keyframes spin {
+            from { transform: translateY(-50%) rotate(0deg); }
+            to { transform: translateY(-50%) rotate(360deg); }
+        }
+
+        .game-panel {
+            background: linear-gradient(145deg, #1a1a2e, #16213e);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 
+                0 0 40px rgba(0, 198, 255, 0.3),
+                inset 0 0 20px rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(0, 198, 255, 0.5);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .game-panel::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #ff6b35, #00c6ff, #ff6b35);
+            background-size: 400% 400%;
+            animation: borderGlow 3s ease infinite;
+            border-radius: 20px;
+            z-index: -1;
+        }
+
+        @keyframes borderGlow {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
         }
 
         h2 {
-            font-size: 16px;
+            font-size: 18px;
             color: #00c6ff;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
+            text-shadow: 0 0 20px rgba(0, 198, 255, 0.8);
+            animation: textGlow 2s ease-in-out infinite alternate;
         }
 
-        p {
-            font-size: 12px;
-            margin-bottom: 20px;
+        @keyframes textGlow {
+            from { text-shadow: 0 0 20px rgba(0, 198, 255, 0.8); }
+            to { text-shadow: 0 0 30px rgba(0, 198, 255, 1); }
+        }
+
+        .question-box {
+            background: linear-gradient(135deg, #2a2a3d, #3a3a5d);
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.1);
+        }
+
+        .question-text {
+            font-size: 14px;
+            line-height: 1.6;
+            margin: 0;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .timer-container {
+            background: linear-gradient(45deg, #ff5050, #ff8080);
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .timer-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            background: linear-gradient(90deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.4));
+            width: 100%;
+            animation: timerCountdown 30s linear;
+            border-radius: 12px;
+        }
+
+        @keyframes timerCountdown {
+            from { width: 100%; }
+            to { width: 0%; }
         }
 
         #timer {
-            font-size: 12px;
+            font-size: 14px;
             font-weight: bold;
-            color: #ff5050;
-            margin-bottom: 20px;
+            color: white;
+            position: relative;
+            z-index: 2;
+            text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .input-container {
+            position: relative;
+            margin-bottom: 25px;
         }
 
         input[type="text"] {
-            padding: 10px;
-            font-size: 10px;
-            width: 250px;
-            border: 1px solid #444;
-            border-radius: 6px;
-            background-color: #2a2a3d;
+            padding: 15px 20px;
+            font-size: 12px;
+            width: 100%;
+            max-width: 350px;
+            border: 2px solid #444;
+            border-radius: 12px;
+            background: linear-gradient(145deg, #2a2a3d, #3a3a5d);
             color: white;
+            text-align: center;
+            transition: all 0.3s ease;
+            font-family: 'Press Start 2P', cursive;
         }
 
-        button {
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #00c6ff;
+            box-shadow: 0 0 20px rgba(0, 198, 255, 0.5);
+            transform: scale(1.02);
+        }
+
+        .submit-btn {
             font-family: 'Press Start 2P', cursive;
-            background: linear-gradient(to right, #00c6ff, #0072ff);
+            background: linear-gradient(45deg, #00c6ff, #0072ff, #ff6b35);
+            background-size: 200% 200%;
             color: white;
             border: none;
-            padding: 10px 18px;
-            font-size: 10px;
-            margin-top: 15px;
-            border-radius: 8px;
+            padding: 15px 30px;
+            font-size: 12px;
+            border-radius: 12px;
             cursor: pointer;
-            transition: transform 0.2s ease, background 0.3s ease;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            animation: buttonShine 3s ease infinite;
         }
 
-        button:hover {
-            transform: scale(1.05);
-            background: linear-gradient(to right, #0072ff, #00c6ff);
+        @keyframes buttonShine {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .submit-btn:hover {
+            transform: scale(1.1) translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 198, 255, 0.4);
+        }
+
+        .submit-btn:active {
+            transform: scale(0.95);
+        }
+
+        .power-ups {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .power-up {
+            background: linear-gradient(45deg, #7b68ee, #9370db);
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        .power-up:hover {
+            transform: scale(1.2);
+            box-shadow: 0 0 20px rgba(123, 104, 238, 0.8);
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+
+        .stats-bar {
+            display: flex;
+            justify-content: space-around;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        .stat {
+            text-align: center;
+            font-size: 10px;
+        }
+
+        .stat-value {
+            font-size: 14px;
+            color: #00c6ff;
+            display: block;
+            margin-top: 5px;
         }
 
         .footer {
             margin-top: 40px;
             font-size: 8px;
             color: #888;
+            position: relative;
+            z-index: 10;
         }
 
+        /* Responsive design */
         @media (max-width: 600px) {
-            input[type="text"] {
-                width: 200px;
+            .game-panel {
+                padding: 20px;
             }
+            
+            input[type="text"] {
+                max-width: 280px;
+                font-size: 10px;
+            }
+            
+            .power-ups {
+                flex-wrap: wrap;
+            }
+            
+            .stats-bar {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+
+        /* Success animation */
+        .success-flash {
+            animation: successFlash 0.5s ease-out;
+        }
+
+        @keyframes successFlash {
+            0% { background-color: rgba(0, 255, 0, 0.3); }
+            100% { background-color: transparent; }
         }
     </style>
 
     <script>
         let secondsLeft = 30;
+        let particles = [];
+
+        function createParticles() {
+            const particleContainer = document.querySelector('.particles');
+            
+            for (let i = 0; i < 20; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 6 + 's';
+                particle.style.animationDuration = (Math.random() * 3 + 3) + 's';
+                particleContainer.appendChild(particle);
+            }
+        }
 
         function startTimer() {
             const timerDisplay = document.getElementById('timer');
             const form = document.getElementById('answerForm');
             const answerInput = document.querySelector('input[name="answer"]');
+            const timerBar = document.querySelector('.timer-bar');
 
             const countdown = setInterval(() => {
                 secondsLeft--;
-                timerDisplay.textContent = `⏱️ Time left: ${secondsLeft} seconds`;
+                timerDisplay.innerHTML = `⏱️ Time left: <span style="color: #ffff00;">${secondsLeft}</span> seconds`;
+                
+                // Change timer color based on time left
+                const timerContainer = document.querySelector('.timer-container');
+                if (secondsLeft <= 10) {
+                    timerContainer.style.background = 'linear-gradient(45deg, #ff3030, #ff6060)';
+                    timerContainer.style.animation = 'pulseRed 0.5s ease-in-out infinite alternate';
+                } else if (secondsLeft <= 20) {
+                    timerContainer.style.background = 'linear-gradient(45deg, #ff8030, #ffaa60)';
+                }
 
                 if (secondsLeft <= 0) {
                     clearInterval(countdown);
                     if (!answerInput.value.trim()) {
                         answerInput.value = "__timeout__";
                     }
-                    alert("⏳ Time's up! Submitting your answer.");
-                    setTimeout(() => form.submit(), 500);
+                    showTimeUpAnimation();
+                    setTimeout(() => form.submit(), 1500);
                 }
             }, 1000);
         }
 
-        window.onload = startTimer;
+        function showTimeUpAnimation() {
+            const gamePanel = document.querySelector('.game-panel');
+            gamePanel.style.animation = 'shake 0.5s ease-in-out';
+            
+            // Create explosion effect
+            for (let i = 0; i < 10; i++) {
+                createExplosionParticle();
+            }
+            
+            alert("⏳ Time's up! Submitting your answer.");
+        }
+
+        function createExplosionParticle() {
+            const particle = document.createElement('div');
+            particle.style.position = 'fixed';
+            particle.style.left = '50%';
+            particle.style.top = '50%';
+            particle.style.width = '6px';
+            particle.style.height = '6px';
+            particle.style.backgroundColor = '#ff6b35';
+            particle.style.borderRadius = '50%';
+            particle.style.pointerEvents = 'none';
+            particle.style.zIndex = '1000';
+            
+            const angle = (Math.PI * 2 * Math.random());
+            const velocity = Math.random() * 200 + 100;
+            const vx = Math.cos(angle) * velocity;
+            const vy = Math.sin(angle) * velocity;
+            
+            particle.style.animation = `explode 1s ease-out forwards`;
+            document.body.appendChild(particle);
+            
+            setTimeout(() => particle.remove(), 1000);
+        }
+
+        function addPowerUpEffects() {
+            const hintBtn = document.getElementById('hintBtn');
+            const skipBtn = document.getElementById('skipBtn');
+            const freezeBtn = document.getElementById('freezeBtn');
+
+            if (hintBtn) {
+                hintBtn.addEventListener('click', () => {
+                    alert('💡 Hint: Think step by step!');
+                });
+            }
+
+            if (skipBtn) {
+                skipBtn.addEventListener('click', () => {
+                    if (confirm('⏭️ Skip this question? (You won\'t get points)')) {
+                        document.querySelector('input[name="answer"]').value = '__skip__';
+                        document.getElementById('answerForm').submit();
+                    }
+                });
+            }
+
+            if (freezeBtn) {
+                freezeBtn.addEventListener('click', () => {
+                    alert('❄️ Time freeze power-up used! (Feature coming soon)');
+                });
+            }
+        }
+
+        function addInputEffects() {
+            const input = document.querySelector('input[name="answer"]');
+            
+            input.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    document.querySelector('.submit-btn').click();
+                }
+            });
+
+            input.addEventListener('input', () => {
+                if (input.value.length > 0) {
+                    input.style.borderColor = '#00ff88';
+                    input.style.boxShadow = '0 0 15px rgba(0, 255, 136, 0.4)';
+                }
+            });
+        }
+
+        window.onload = function() {
+            createParticles();
+            startTimer();
+            addPowerUpEffects();
+            addInputEffects();
+        };
     </script>
+    
+    <style>
+        @keyframes pulseRed {
+            from { box-shadow: 0 0 20px rgba(255, 48, 48, 0.6); }
+            to { box-shadow: 0 0 40px rgba(255, 48, 48, 1); }
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+        
+        @keyframes explode {
+            0% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(-50%, -50%) translate(var(--random-x, 0), var(--random-y, 0)) scale(0);
+                opacity: 0;
+            }
+        }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <h2>🎯 Level {{ level }}</h2>
-        <p>🧠 {{ question.question_text }}</p>
-        <p id="timer">⏱️ Time left: 30 seconds</p>
+    <div class="particles"></div>
+    
+    <div class="game-container">
+        <div class="level-header">
+            <h2>🎯 Level {{ level }}</h2>
+        </div>
 
-        <form method="post" id="answerForm">
-            {% csrf_token %}
-            <input type="text" name="answer" required autocomplete="off" autofocus>
-            <br>
-            <button type="submit">🚀 Submit</button>
-        </form>
+        <div class="stats-bar">
+            <div class="stat">
+                <div>⚡ XP</div>
+                <span class="stat-value">{{ user_xp|default:0 }}</span>
+            </div>
+            <div class="stat">
+                <div>🔥 Streak</div>
+                <span class="stat-value">{{ user_streak|default:0 }}</span>
+            </div>
+            <div class="stat">
+                <div>🏆 Score</div>
+                <span class="stat-value">{{ user_score|default:0 }}</span>
+            </div>
+            <div class="stat">
+                <div>💎 Lives</div>
+                <span class="stat-value">{{ lives_left|default:3 }}</span>
+            </div>
+        </div>
+
+        <div class="game-panel">
+            <div class="question-box">
+                <p class="question-text">🧠 {{ question.question_text }}</p>
+            </div>
+
+            <div class="timer-container">
+                <div class="timer-bar"></div>
+                <p id="timer">⏱️ Time left: <span style="color: #ffff00;">30</span> seconds</p>
+            </div>
+
+            <div class="power-ups">
+                <button class="power-up" id="hintBtn" title="Get a hint">💡</button>
+                <button class="power-up" id="freezeBtn" title="Freeze time">❄️</button>
+                <button class="power-up" id="skipBtn" title="Skip question">⏭️</button>
+            </div>
+
+            <form method="post" id="answerForm">
+                {% csrf_token %}
+                <div class="input-container">
+                    <input type="text" name="answer" placeholder="Enter your answer..." required autocomplete="off" autofocus>
+                </div>
+                <button type="submit" class="submit-btn">🚀 Submit Answer</button>
+            </form>
+        </div>
     </div>
 
     <div class="footer">
-        © 2025 Brain Ladder | Owned by Techzniczone
+        © 2025 Brain Ladder | Owned by Techzniczone | 🎮 Level Up Your Mind!
     </div>
 </body>
 </html>
