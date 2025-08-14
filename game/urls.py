@@ -2,6 +2,9 @@ from django.urls import path
 from . import views
 
 
+
+
+
 from django.contrib.auth import views as auth_views
 
 
@@ -29,7 +32,8 @@ urlpatterns = [
     path('refund/', views.refund_policy, name='refund_policy'),
     path('privacy/', views.privacy_policy, name='privacy_policy'),
     path('terms/', views.terms, name='terms'),
-
+    #path('admin/financial-year-payouts/', views.financial_year_payouts, name='financial_year_payouts'),
+    path('payouts/financial-year/', views.financial_year_payouts, name='financial_year_payouts'), 
 
 
 ]

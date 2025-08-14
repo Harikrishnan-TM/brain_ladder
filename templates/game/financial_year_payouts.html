@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ financial_year }} - TDS Payout Tracking</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #e1e8ed;
+        }
+        
+        .header h1 {
+            color: #2c3e50;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .tds-info {
+            background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid #f39c12;
+        }
+        
+        .tds-info strong {
+            color: #856404;
+        }
+        
+        .year-selector {
+            margin-bottom: 20px;
+        }
+        
+        .year-selector select {
+            padding: 10px 20px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            background: white;
+            color: #333;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .year-selector select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, #fff, #f8fafc);
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e1e8ed;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+        }
+        
+        .stat-card.tds {
+            border-left: 5px solid #e74c3c;
+        }
+        
+        .stat-card.paid {
+            border-left: 5px solid #27ae60;
+        }
+        
+        .stat-card.users {
+            border-left: 5px solid #3498db;
+        }
+        
+        .stat-card.threshold {
+            border-left: 5px solid #f39c12;
+        }
+        
+        .stat-value {
+            font-size: 2.2rem;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 8px;
+        }
+        
+        .stat-label {
+            color: #7f8c8d;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .section {
+            margin-bottom: 40px;
+        }
+        
+        .section h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #ecf0f1;
+        }
+        
+        .table-container {
+            overflow-x: auto;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.06);
+            background: white;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ecf0f1;
+        }
+        
+        th {
+            background: linear-gradient(135deg, #f8fafc, #e1e8ed);
+            font-weight: 600;
+            color: #2c3e50;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+        }
+        
+        td {
+            color: #34495e;
+            font-size: 0.9rem;
+        }
+        
+        tr:hover {
+            background-color: #f8fafc;
+        }
+        
+        .amount {
+            font-weight: 600;
+            color: #27ae60;
+        }
+        
+        .tds-amount {
+            font-weight: 600;
+            color: #e74c3c;
+        }
+        
+        .threshold-warning {
+            font-weight: 600;
+            color: #f39c12;
+        }
+        
+        .tds-required {
+            background: #ffebee;
+            border-left: 4px solid #e74c3c;
+        }
+        
+        .below-threshold {
+            background: #e8f5e8;
+            border-left: 4px solid #27ae60;
+        }
+        
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #ecf0f1;
+        }
+        
+        .tab {
+            padding: 15px 25px;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #7f8c8d;
+            transition: all 0.3s ease;
+        }
+        
+        .tab.active {
+            color: #2c3e50;
+            border-bottom-color: #667eea;
+        }
+        
+        .tab:hover {
+            color: #2c3e50;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .export-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-left: 10px;
+        }
+        
+        .export-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+                margin: 10px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .tabs {
+                flex-direction: column;
+            }
+            
+            .tab {
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>TDS Payout Tracking System</h1>
+            <div class="tds-info">
+                <strong>TDS Compliance:</strong> Users with total payouts ≥ ₹{{ tds_threshold|floatformat:0 }} per FY require 10% TDS deduction
+            </div>
+            <div class="year-selector">
+                <label for="year-select">Select Financial Year: </label>
+                <select id="year-select" onchange="changeYear()">
+                    {% for year in available_years %}
+                        <option value="{{ year.year }}" {% if year.year == selected_year %}selected{% endif %}>
+                            {{ year.display }}
+                        </option>
+                    {% endfor %}
+                </select>
+                <button class="export-btn" onclick="window.print()">Export TDS Report</button>
+            </div>
+            <p style="color: #7f8c8d; margin-top: 10px;">
+                Period: {{ fy_start|date:"d M Y" }} to {{ fy_end|date:"d M Y" }}
+            </p>
+        </div>
+
+        <!-- TDS Summary Statistics -->
+        <div class="stats-grid">
+            <div class="stat-card paid">
+                <div class="stat-value">₹{{ total_paid_amount|floatformat:2 }}</div>
+                <div class="stat-label">Total Paid Amount</div>
+            </div>
+            <div class="stat-card tds">
+                <div class="stat-value">₹{{ total_tds_amount|floatformat:2 }}</div>
+                <div class="stat-label">Total TDS Amount</div>
+            </div>
+            <div class="stat-card users">
+                <div class="stat-value">{{ users_requiring_tds }}</div>
+                <div class="stat-label">Users Requiring TDS</div>
+            </div>
+            <div class="stat-card threshold">
+                <div class="stat-value">{{ total_users_with_payouts }}</div>
+                <div class="stat-label">Total Users with Payouts</div>
+            </div>
+        </div>
+
+        <!-- Tabs for different views -->
+        <div class="tabs">
+            <div class="tab active" onclick="showTab('tds-users')">TDS Required Users ({{ users_requiring_tds }})</div>
+            <div class="tab" onclick="showTab('below-threshold')">Below Threshold ({{ below_threshold_users|length }})</div>
+            <div class="tab" onclick="showTab('monthly-breakdown')">Monthly TDS Breakdown</div>
+        </div>
+
+        <!-- TDS Required Users -->
+        <div id="tds-users" class="tab-content active">
+            <div class="section">
+                <h2>Users Requiring TDS Deduction (≥ ₹{{ tds_threshold|floatformat:0 }})</h2>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Username</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Total Payout</th>
+                                <th>TDS Amount (10%)</th>
+                                <th>Amount After TDS</th>
+                                <th>Total Requests</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for user in tds_applicable_users %}
+                            <tr class="tds-required">
+                                <td><strong>{{ user.user__username }}</strong></td>
+                                <td>{{ user.user__first_name }} {{ user.user__last_name }}</td>
+                                <td>{{ user.user__email }}</td>
+                                <td class="amount">₹{{ user.total_amount|floatformat:2 }}</td>
+                                <td class="tds-amount">₹{{ user.tds_amount|floatformat:2 }}</td>
+                                <td class="amount">₹{{ user.amount_after_tds|floatformat:2 }}</td>
+                                <td>{{ user.total_requests }}</td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="7" style="text-align: center; color: #7f8c8d; padding: 40px;">
+                                    No users have crossed the TDS threshold of ₹{{ tds_threshold|floatformat:0 }} in {{ financial_year }}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Below Threshold Users -->
+        <div id="below-threshold" class="tab-content">
+            <div class="section">
+                <h2>Users Below TDS Threshold (< ₹{{ tds_threshold|floatformat:0 }})</h2>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Username</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Total Payout</th>
+                                <th>Remaining to Threshold</th>
+                                <th>Total Requests</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for user in below_threshold_users %}
+                            <tr class="below-threshold">
+                                <td><strong>{{ user.user__username }}</strong></td>
+                                <td>{{ user.user__first_name }} {{ user.user__last_name }}</td>
+                                <td>{{ user.user__email }}</td>
+                                <td class="amount">₹{{ user.total_amount|floatformat:2 }}</td>
+                                <td class="threshold-warning">₹{{ tds_threshold|add:user.total_amount|floatformat:2|cut:"-" }}</td>
+                                <td>{{ user.total_requests }}</td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="6" style="text-align: center; color: #7f8c8d; padding: 40px;">
+                                    All users with payouts have crossed the TDS threshold in {{ financial_year }}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Monthly TDS Breakdown -->
+        <div id="monthly-breakdown" class="tab-content">
+            <div class="section">
+                <h2>Monthly TDS Breakdown</h2>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Month</th>
+                                <th>Total Payouts</th>
+                                <th>Users Above Threshold</th>
+                                <th>TDS Deducted</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for month in monthly_tds_data %}
+                            <tr>
+                                <td><strong>{{ month.month }} {{ month.year }}</strong></td>
+                                <td class="amount">₹{{ month.amount|floatformat:2 }}</td>
+                                <td>{{ month.users_above_threshold }}</td>
+                                <td class="tds-amount">₹{{ month.tds_amount|floatformat:2 }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function changeYear() {
+            const select = document.getElementById('year-select');
+            const year = select.value;
+            window.location.href = `?year=${year}`;
+        }
+
+        function showTab(tabId) {
+            // Hide all tab contents
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => content.classList.remove('active'));
+            
+            // Remove active class from all tabs
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Show selected tab content
+            document.getElementById(tabId).classList.add('active');
+            
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+        }
+    </script>
+</body>
+</html>
