@@ -1,9 +1,44 @@
 asgiref==3.9.1
 Django==5.2.5
 gunicorn==23.0.0
-packaging==25.0
-psycopg2-binary==2.9.10
 sqlparse==0.5.3
-typing_extensions==4.14.1
 tzdata==2025.2
-python-decouple
+typing_extensions==4.14.1
+python-decouple==3.8
+
+# Database
+psycopg2-binary==2.9.10
+dj-database-url==1.0.0
+
+# Static/Media Storage
+django-storages==1.14.6
+boto3==1.40.11
+botocore==1.40.11
+s3transfer==0.13.1
+jmespath==1.0.1
+
+# Static files serving
+whitenoise==6.9.0
+
+# Channels & WebSockets
+channels==4.2.2
+daphne==4.1.2
+channels-redis==4.2.1
+
+# Celery & Redis
+celery==5.5.3
+redis==3.5.3
+kombu==5.5.4
+billiard==4.2.1
+vine==5.1.0
+amqp==5.3.1
+
+# REST API
+djangorestframework==3.16.0
+djangorestframework-simplejwt==5.3.1
+
+# Common extras you had
+django-cors-headers==4.7.0
+django-widget-tweaks==1.4.5
+django-filter==2.2.0
+django-timezone-field==7.1
