@@ -61,6 +61,7 @@ class KYC(models.Model):
     full_name = models.CharField(max_length=100)
     pan_number = models.CharField(max_length=10)
     aadhaar_number = models.CharField(max_length=12)
+    aadhaar_front = models.ImageField(upload_to='aadhaar/', blank=True, null=True)  # 👈 new field
     is_verified = models.BooleanField(default=False)  # Optional: For admin verification
 
     def __str__(self):

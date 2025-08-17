@@ -286,16 +286,17 @@ def payment_success(request):
 @login_required
 def submit_kyc(request):
     kyc, created = KYC.objects.get_or_create(user=request.user)
+
     if request.method == 'POST':
-        form = KYCForm(request.POST, instance=kyc)
+        form = KYCForm(request.POST, request.FILES, instance=kyc)  # ✅ include request.FILES
         if form.is_valid():
             form.save()
             messages.success(request, "✅ KYC submitted successfully.")
             return redirect('wallet')
     else:
         form = KYCForm(instance=kyc)
-    return render(request, 'game/kyc_form.html', {'form': form})
 
+    return render(request, 'game/kyc_form.html', {'form': form})
 
 
 
