@@ -1,6 +1,8 @@
+import os
 from pathlib import Path
 from decouple import config, Csv
 
+# Base directory
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY
@@ -16,8 +18,8 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "game",
-    "storages",  # for S3 storage
+    "game",       # your app
+    "storages",   # for Supabase S3 storage
 ]
 
 # Middleware
@@ -51,7 +53,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "brain_ladder.wsgi.application"
 
-# Database (Supabase / Postgres)
+# Database (Supabase Postgres)
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
@@ -63,7 +65,7 @@ DATABASES = {
     }
 }
 
-# Password validation (disable for now)
+# Password validation (optional – enable in production)
 AUTH_PASSWORD_VALIDATORS = []
 
 # Internationalization
@@ -77,31 +79,31 @@ STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
 # Media / File storage (Supabase S3)
+DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+
 AWS_ACCESS_KEY_ID = config("AWS_ACCESS_KEY_ID")
 AWS_SECRET_ACCESS_KEY = config("AWS_SECRET_ACCESS_KEY")
-AWS_STORAGE_BUCKET_NAME = config("AWS_STORAGE_BUCKET_NAME")
-AWS_S3_ENDPOINT_URL = config("AWS_S3_ENDPOINT_URL")
-AWS_S3_REGION_NAME = config("AWS_S3_REGION_NAME", default="ap-southeast-1")
-AWS_S3_SIGNATURE_VERSION = "s3v4"
+AWS_STORAGE_BUCKET_NAME = "kyc-documents"   # must match Supabase bucket name
+AWS_S3_ENDPOINT_URL = "https://tbweyeoutumitoggtuhi.storage.supabase.co/storage/v1/s3"
+AWS_S3_REGION_NAME = "ap-southeast-1"       # dummy but required
+AWS_QUERYSTRING_AUTH = True                 # signed URLs for privacy
 AWS_S3_FILE_OVERWRITE = False
 AWS_DEFAULT_ACL = None
-AWS_QUERYSTRING_AUTH = False
-DEFAULT_FILE_STORAGE = "https://tbweyeoutumitoggtuhi.storage.supabase.co/storage/v1/s3"
 
 # Authentication redirects
 LOGIN_URL = "login"
 LOGIN_REDIRECT_URL = "home"
 LOGOUT_REDIRECT_URL = "login"
 
-# Razorpay test keys (replace in production!)
+# Razorpay keys
 RAZORPAY_KEY_ID = config("RAZORPAY_KEY_ID", default="rzp_test_A8YS3sL3hDWZWu")
 RAZORPAY_KEY_SECRET = config("RAZORPAY_KEY_SECRET", default="ezPN6gzRNAjAybF3ojsgeRIX")
 
+# Auto primary key type
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-
+# CSRF Trusted Origins
 CSRF_TRUSTED_ORIGINS = [
-    "https://quiz-ladder.fly.dev",   # your Fly.io domain
-    # add your custom domain if you later use one
+    "https://quiz-ladder.fly.dev",
+    # Add custom domain later if needed
 ]
-
