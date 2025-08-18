@@ -98,3 +98,10 @@ RAZORPAY_KEY_ID = config("RAZORPAY_KEY_ID", default="rzp_test_A8YS3sL3hDWZWu")
 RAZORPAY_KEY_SECRET = config("RAZORPAY_KEY_SECRET", default="ezPN6gzRNAjAybF3ojsgeRIX")
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://quiz-ladder.fly.dev",   # your Fly.io domain
+    # add your custom domain if you later use one
+]
+
