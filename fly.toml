@@ -16,7 +16,7 @@ primary_region = "sin"
   processes = ["app"]
 
 [processes]
-  app = "gunicorn brain_ladder.wsgi:application --bind 0.0.0.0:8080 --workers 4"
+  app = "gunicorn brain_ladder.wsgi:application --bind 0.0.0.0:8080 --workers 1"
 
 [vm]
   cpu_kind = "shared"
