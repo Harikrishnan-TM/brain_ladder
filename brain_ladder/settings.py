@@ -16,7 +16,7 @@ DEBUG = config("DEBUG", default=False, cast=bool)
 ALLOWED_HOSTS = config("ALLOWED_HOSTS", default="", cast=Csv())
 
 # =========================
-# Installed apps ok ok
+# Installed apps ok ok ok ok
 # =========================
 INSTALLED_APPS = [
     "django.contrib.admin",
