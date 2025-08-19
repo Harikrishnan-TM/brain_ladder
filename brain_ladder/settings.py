@@ -108,7 +108,7 @@ AWS_SECRET_ACCESS_KEY = config("AWS_SECRET_ACCESS_KEY")
 AWS_STORAGE_BUCKET_NAME = config("AWS_STORAGE_BUCKET_NAME")
 AWS_S3_ENDPOINT_URL = config("AWS_S3_ENDPOINT_URL")
 AWS_S3_REGION_NAME = config("AWS_S3_REGION_NAME", default="us-east-1")
-AWS_QUERYSTRING_AUTH = True
+#AWS_QUERYSTRING_AUTH = True
 AWS_S3_FILE_OVERWRITE = False
 AWS_DEFAULT_ACL = None
 # Remove or comment this line (not needed for Supabase):
@@ -192,3 +192,6 @@ LOGGING = {
         },
     },
 }
+
+AWS_QUERYSTRING_AUTH = False
+MEDIA_URL = "https://tbweyeoutumitoggtuhi.supabase.co/storage/v1/object/public/kyc-documents/"
