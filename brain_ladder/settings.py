@@ -98,17 +98,24 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 # =========================
 # Media / File storage (Supabase S3)
 # =========================
+# =========================
+# Media / File storage (Supabase S3)
+# =========================
 DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
 
 AWS_ACCESS_KEY_ID = config("AWS_ACCESS_KEY_ID")
 AWS_SECRET_ACCESS_KEY = config("AWS_SECRET_ACCESS_KEY")
-AWS_STORAGE_BUCKET_NAME = "kyc-documents"  # must match Supabase bucket name
-AWS_S3_ENDPOINT_URL = "https://tbweyeoutumitoggtuhi.storage.supabase.co/storage/v1/s3"
-AWS_S3_REGION_NAME = "us-east-1"  # required but dummy
-AWS_QUERYSTRING_AUTH = True        # signed URLs for privacy
+AWS_STORAGE_BUCKET_NAME = config("AWS_STORAGE_BUCKET_NAME")
+AWS_S3_ENDPOINT_URL = config("AWS_S3_ENDPOINT_URL")
+AWS_S3_REGION_NAME = config("AWS_S3_REGION_NAME", default="us-east-1")
+AWS_QUERYSTRING_AUTH = True
 AWS_S3_FILE_OVERWRITE = False
 AWS_DEFAULT_ACL = None
-AWS_S3_CUSTOM_DOMAIN = f"{AWS_STORAGE_BUCKET_NAME}.storage.supabase.co"  # full URL generation
+# Remove or comment this line (not needed for Supabase):
+# AWS_S3_CUSTOM_DOMAIN = f"{AWS_STORAGE_BUCKET_NAME}.storage.supabase.co"
+
+
+
 
 # =========================
 # Authentication redirects
